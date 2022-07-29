@@ -47,4 +47,11 @@ BACKUP*
 backup*
 
 *.tmp
+<<<<<<< HEAD
 *.bin
+=======
+*.bin
+
+# Docker Stuff
+ProjectLighthouse.*.tar
+>>>>>>> 4b44a04 (updated for story levels)

@@ -23,7 +23,6 @@ public class ScoreController : ControllerBase
     {
         this.database = database;
     }
-
     [HttpPost("scoreboard/{slotType}/{id:int}")]
     public async Task<IActionResult> SubmitScore(string slotType, int id, [FromQuery] bool lbp1 = false, [FromQuery] bool lbp2 = false, [FromQuery] bool lbp3 = false)
     {

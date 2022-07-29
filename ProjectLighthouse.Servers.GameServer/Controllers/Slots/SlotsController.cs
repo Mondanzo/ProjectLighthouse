@@ -64,32 +64,6 @@ public class SlotsController : ControllerBase
         );
     }
 
-    [HttpGet("slotList")]
-    public async Task<IActionResult> GetSlotListAlt([FromQuery] int[] s)
-    {
-        GameToken? token = await this.database.GameTokenFromRequest(this.Request);
-        if (token == null) return this.StatusCode(403, "");
-
-        List<string?> serializedSlots = new();
-        foreach (int slotId in s)
-        {
-            Slot? slot = await this.database.Slots.Include(t => t.Creator).Include(t => t.Location).Where(t => t.SlotId == slotId && t.Type == SlotType.User).FirstOrDefaultAsync();
-            if (slot == null)
-            {
-                slot = await this.database.Slots.Where(t => t.InternalSlotId == slotId && t.Type == SlotType.Developer).FirstOrDefaultAsync();
-                if (slot == null)
-                {
-                    serializedSlots.Add($"<slot type=\"developer\"><id>{slotId}</id></slot>");
-                    continue;
-                }
-            }
-            serializedSlots.Add(slot.Serialize());
-        }
-        string serialized = serializedSlots.Aggregate(string.Empty, (current, slot) => slot == null ? current : current + slot);
-
-        return this.Ok(LbpSerializer.TaggedStringElement("slots", serialized, "total", serializedSlots.Count));
-    }
-
     [HttpGet("s/developer/{id:int}")]
     public async Task<IActionResult> SDev(int id)
     {
@@ -99,12 +73,25 @@ public class SlotsController : ControllerBase
         GameToken? token = await this.database.GameTokenFromRequest(this.Request);
         if (token == null) return this.StatusCode(403, "");
 
-        int slotId = await SlotHelper.GetPlaceholderSlotId(this.database, id, SlotType.Developer);
-        Slot slot = await this.database.Slots.FirstAsync(s => s.SlotId == slotId);
+        GameVersion gameVersion = token.GameVersion;
 
-        return this.Ok(slot.SerializeDevSlot());
-    } 
+        Slot? slot = await this.database.Slots.ByGameVersion(gameVersion, true, true).FirstOrDefaultAsync(s => s.SlotId == id);
+        if (slot == null)
+        {
+            slot = new Slot();
+            slot.CreatorId = 0;
+            slot.SlotId = id;
+            slot.LocationId = 1;
+            slot.Name = "Actual Name to be added - Story Level of " + GameVersion.GetName(token.GameVersion);
+            this.database.Slots.Add(slot);
+        }
 
+        RatedLevel? ratedLevel = await this.database.RatedLevels.FirstOrDefaultAsync(r => r.SlotId == id && r.UserId == user.UserId);
+        VisitedLevel? visitedLevel = await this.database.VisitedLevels.FirstOrDefaultAsync(r => r.SlotId == id && r.UserId == user.UserId);
+        Review? review = await this.database.Reviews.FirstOrDefaultAsync(r => r.SlotId == id && r.ReviewerId == user.UserId);
+        return this.Ok(slot.Serialize(gameVersion, ratedLevel, visitedLevel, review));
+    }
+    
     [HttpGet("s/user/{id:int}")]
     public async Task<IActionResult> SUser(int id)
     {

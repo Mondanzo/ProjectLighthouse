@@ -24,6 +24,7 @@ public class CommentController : ControllerBase
 
     [HttpPost("rateUserComment/{username}")]
     [HttpPost("rateComment/user/{slotId:int}")]
+    [HttpPost("rateComment/developer/{slotId:int}")]
     public async Task<IActionResult> RateComment([FromQuery] int commentId, [FromQuery] int rating, string? username, int? slotId)
     {
         User? user = await this.database.UserFromGameRequest(this.Request);
@@ -36,6 +37,7 @@ public class CommentController : ControllerBase
     }
 
     [HttpGet("comments/user/{slotId:int}")]
+    [HttpGet("comments/developer/{slotId:int}")]
     [HttpGet("userComments/{username}")]
     public async Task<IActionResult> GetComments([FromQuery] int pageStart, [FromQuery] int pageSize, string? username, int? slotId)
     {
@@ -72,6 +74,7 @@ public class CommentController : ControllerBase
     }
 
     [HttpPost("postUserComment/{username}")]
+    [HttpPost("postComment/developer/{slotId:int}")]
     [HttpPost("postComment/user/{slotId:int}")]
     public async Task<IActionResult> PostComment(string? username, int? slotId)
     {
@@ -102,6 +105,7 @@ public class CommentController : ControllerBase
 
     [HttpPost("deleteUserComment/{username}")]
     [HttpPost("deleteComment/user/{slotId:int}")]
+    [HttpPost("deleteComment/developer/{slotId:int}")]
     public async Task<IActionResult> DeleteComment([FromQuery] int commentId, string? username, int? slotId)
     {
         User? user = await this.database.UserFromGameRequest(this.Request);

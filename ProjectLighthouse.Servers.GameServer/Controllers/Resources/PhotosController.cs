@@ -105,6 +105,7 @@ public class PhotosController : ControllerBase
     }
 
     [HttpGet("photos/user/{id:int}")]
+    [HttpGet("photos/developer/{id:int}")]
     public async Task<IActionResult> SlotPhotos(int id)
     {
         List<Photo> photos = await this.database.Photos.Include(p => p.Creator).Take(10).ToListAsync();

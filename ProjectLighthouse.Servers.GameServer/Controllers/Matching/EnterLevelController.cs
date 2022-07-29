@@ -20,6 +20,24 @@ public class EnterLevelController : ControllerBase
         this.database = database;
     }
 
+    [HttpPost("play/developer/{slotId}")]
+    public async Task<IActionResult> PlayStoryLeveL(int slotId){
+        GameToken? token = await this.database.GameTokenFromRequest(this.Request);
+        if (token == null) return this.StatusCode(403, "");
+
+        if (this.database.Slots.Find(slotId) == null)
+        {
+            Slot slot = new Slot();
+            slot.CreatorId = 0;
+            slot.SlotId = slotId;
+            slot.LocationId = 1;
+            slot.Name = "Actual Name to be added - Story Level of " + GameVersion.GetName(token.GameVersion);
+            this.database.Slots.Add(slot);
+        }
+
+        return await PlayLevel(slotId);
+    }
+
     [HttpPost("play/user/{slotId}")]
     public async Task<IActionResult> PlayLevel(int slotId)
     {

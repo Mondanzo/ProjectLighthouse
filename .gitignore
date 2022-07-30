@@ -47,15 +47,4 @@ BACKUP*
 backup*
 
 *.tmp
-<<<<<<< HEAD
 *.bin
-=======
-*.bin
-
-# Docker Stuff
-ProjectLighthouse.*.tar
-<<<<<<< HEAD
->>>>>>> 4b44a04 (updated for story levels)
-=======
-logs/
->>>>>>> 1dee5ed (updated .gitignore)

@@ -1,6 +1,7 @@
 #nullable enable
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
+using LBPUnion.ProjectLighthouse.Extensions;
 using LBPUnion.ProjectLighthouse.Helpers;
 using LBPUnion.ProjectLighthouse.Levels;
 using LBPUnion.ProjectLighthouse.PlayerData;
@@ -23,79 +24,14 @@ public class ScoreController : ControllerBase
         this.database = database;
     }
 
-    [HttpPost("scoreboard/developer/{id:int}")]
-    public async Task<IActionResult> SubmitStoryScore(int id, [FromQuery] bool lbp1 = false, [FromQuery] bool lbp2 = false, [FromQuery] bool lbp3 = false){
-        (User, GameToken)? userAndToken = await this.database.UserAndGameTokenFromRequest(this.Request);
-
-        if (userAndToken == null) return this.StatusCode(403, "");
-
-        User user = userAndToken.Value.Item1;
-        GameToken gameToken = userAndToken.Value.Item2;
-
-        this.Request.Body.Position = 0;
-        string bodyString = await new StreamReader(this.Request.Body).ReadToEndAsync();
-
-        XmlSerializer serializer = new(typeof(Score));
-        Score? score = (Score?)serializer.Deserialize(new StringReader(bodyString));
-        if (score == null) return this.BadRequest();
-
-        score.SlotId = id;
-
-        Slot? slot = this.database.Slots.FirstOrDefault(s => s.SlotId == score.SlotId);
-        if(slot == null) {
-            slot = new Slot();
-            slot.CreatorId = 0;
-            slot.SlotId = id;
-            slot.LocationId = 1;
-            slot.Name = "Actual Name to be added - Story Level of " + GameVersion.GetName(gameToken.GameVersion);
-            this.database.Slots.Add(slot);
-        }
-
-        switch (gameToken.GameVersion)
-        {
-            case GameVersion.LittleBigPlanet1:
-                slot.PlaysLBP1Complete++;
-                break;
-            case GameVersion.LittleBigPlanet2:
-                slot.PlaysLBP2Complete++;
-                break;
-            case GameVersion.LittleBigPlanet3:
-                slot.PlaysLBP3Complete++;
-                break;
-            case GameVersion.LittleBigPlanetVita:
-                slot.PlaysLBPVitaComplete++;
-                break;
-        }
-
-        IQueryable<Score> existingScore = this.database.Scores.Where(s => s.SlotId == score.SlotId)
-            .Where(s => s.PlayerIdCollection == score.PlayerIdCollection)
-            .Where(s => s.Type == score.Type);
-
-        if (existingScore.Any())
-        {
-            Score first = existingScore.First(s => s.SlotId == score.SlotId);
-            score.ScoreId = first.ScoreId;
-            score.Points = Math.Max(first.Points, score.Points);
-            this.database.Entry(first).CurrentValues.SetValues(score);
-        }
-        else
-        {
-            this.database.Scores.Add(score);
-        }
-
-        await this.database.SaveChangesAsync();
-
-        string myRanking = this.getScores(score.SlotId, score.Type, user, -1, 5, "scoreboardSegment");
-
-        return this.Ok(myRanking);
-    }
-
-    [HttpPost("scoreboard/user/{id:int}")]
-    public async Task<IActionResult> SubmitScore(int id, [FromQuery] bool lbp1 = false, [FromQuery] bool lbp2 = false, [FromQuery] bool lbp3 = false)
+    [HttpPost("scoreboard/{slotType}/{id:int}")]
+    public async Task<IActionResult> SubmitScore(string slotType, int id, [FromQuery] bool lbp1 = false, [FromQuery] bool lbp2 = false, [FromQuery] bool lbp3 = false)
     {
         (User, GameToken)? userAndToken = await this.database.UserAndGameTokenFromRequest(this.Request);
 
         if (userAndToken == null) return this.StatusCode(403, "");
+
+        if (SlotHelper.IsTypeInvalid(slotType)) return this.BadRequest();
 
         // ReSharper disable once PossibleInvalidOperationException
         User user = userAndToken.Value.Item1;
@@ -109,6 +45,8 @@ public class ScoreController : ControllerBase
         if (score == null) return this.BadRequest();
 
         SanitizationHelper.SanitizeStringsInClass(score);
+
+        if (slotType == "developer") id = await SlotHelper.GetPlaceholderSlotId(this.database, id, SlotType.Developer);
 
         score.SlotId = id;
 
@@ -160,15 +98,18 @@ public class ScoreController : ControllerBase
         //=> await TopScores(slotId, type);
         => this.Ok(LbpSerializer.BlankElement("scores"));
 
-    [HttpGet("topscores/user/{slotId:int}/{type:int}")]
-    [HttpGet("topscores/developer/{slotId:int}/{type:int}")]
+    [HttpGet("topscores/{slotType}/{slotId:int}/{type:int}")]
     [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-    public async Task<IActionResult> TopScores(int slotId, int type, [FromQuery] int pageStart = -1, [FromQuery] int pageSize = 5)
+    public async Task<IActionResult> TopScores(string slotType, int slotId, int type, [FromQuery] int pageStart = -1, [FromQuery] int pageSize = 5)
     {
         // Get username
         User? user = await this.database.UserFromGameRequest(this.Request);
 
         if (user == null) return this.StatusCode(403, "");
+
+        if (SlotHelper.IsTypeInvalid(slotType)) return this.BadRequest();
+
+        if (slotType == "developer") slotId = await SlotHelper.GetPlaceholderSlotId(this.database, slotId, SlotType.Developer);
 
         return this.Ok(this.getScores(slotId, type, user, pageStart, pageSize));
     }

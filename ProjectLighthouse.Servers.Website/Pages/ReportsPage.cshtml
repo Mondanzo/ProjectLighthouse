@@ -10,13 +10,13 @@
 <p>There are @Model.ReportCount total reports!</p>
 
 <form action="/admin/reports/0">
-    <div class="ui icon input">
-        <input type="text" autocomplete="off" name="name" placeholder="Search reports..." value="@Model.SearchValue">
-        <i class="search icon"></i>
+    <div class="input">
+        <i class="bx bx-search"></i>
+        <input class="no-input" type="text" autocomplete="off" name="name" placeholder="Search reports..." value="@Model.SearchValue">
     </div>
 </form>
 
-<div class="ui divider"></div>
+<div class="divider-solid"></div>
 
 <script>
     let subjects = [];
@@ -25,11 +25,12 @@
     let ctx = [];
     let images = [];
 </script>
-
-@foreach (GriefReport report in Model.Reports)
-{
-    @await Html.PartialAsync("Partials/ReportPartial", report)
-}
+<div class="flex-grid">
+    @foreach (GriefReport report in Model.Reports)
+    {
+        @await Html.PartialAsync("Partials/ReportPartial", report)
+    }
+</div>
 
 @await Html.PartialAsync("Partials/RenderReportBoundsPartial")
 

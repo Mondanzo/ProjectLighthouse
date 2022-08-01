@@ -1,5 +1,6 @@
 @page "/register"
 @using LBPUnion.ProjectLighthouse.Configuration
+@using LBPUnion.ProjectLighthouse.Localization.StringLists
 @model LBPUnion.ProjectLighthouse.Servers.Website.Pages.RegisterForm
 
 @{
@@ -24,11 +25,15 @@
 
 @if (!string.IsNullOrWhiteSpace(Model.Error))
 {
-    <div class="ui negative message">
-        <div class="header">
-            Uh oh!
+    <div class="container box-container box-background error">
+        <div class="divider-dashed no-margin"></div>
+        <div class="box-margin">
+            <h3 class="header no-margin">
+                @Model.Translate(GeneralStrings.Error)
+            </h3>
+            <p class="no-margin">@Model.Error</p>
         </div>
-        <p>@Model.Error</p>
+        <div class="divider-dashed no-margin"></div>
     </div>
 }
 
@@ -37,9 +42,9 @@
 
     <div class="field">
         <label>Username</label>
-        <div class="ui left icon input">
-            <input type="text" name="username" id="text" placeholder="Username" pattern="^[a-zA-Z0-9_.-]*$" minlength="3" maxlength="16">
-            <i class="user icon"></i>
+        <div class="input">
+            <i class="bx bx-user"></i>
+            <input class="no-input" type="text" name="username" id="text" placeholder="Username" pattern="^[a-zA-Z0-9_.-]*$" minlength="3" maxlength="16">
         </div>
     </div>
 
@@ -47,28 +52,28 @@
     {
         <div class="field">
             <label>Email address</label>
-            <div class="ui left icon input">
-                <input type="email" name="emailAddress" id="emailAddress" placeholder="Email Address">
-                <i class="mail icon"></i>
+            <div class="input">
+                <i class="bx bx-mail"></i>
+                <input class="no-input" type="email" name="emailAddress" id="emailAddress" placeholder="Email Address">
             </div>
         </div>
     }
 
     <div class="field">
         <label>Password</label>
-        <div class="ui left icon input">
-            <input type="password" id="password" placeholder="Password">
+        <div class="input">
+            <i class="bx bx-lock"></i>
+            <input class="no-input" type="password" id="password" placeholder="Password">
             <input type="hidden" name="password" id="password-submit">
-            <i class="lock icon"></i>
         </div>
     </div>
 
     <div class="field">
         <label>Confirm Password</label>
-        <div class="ui left icon input">
-            <input type="password" id="confirmPassword" placeholder="Confirm Password">
+        <div class="input">
+            <i class="bx bx-lock"></i>
+            <input class="no-input" type="password" id="confirmPassword" placeholder="Confirm Password">
             <input type="hidden" name="confirmPassword" id="confirm-submit">
-            <i class="lock icon"></i>
         </div>
     </div>
 
@@ -77,14 +82,14 @@
         @await Html.PartialAsync("Partials/CaptchaPartial")
     }
 
-    <input type="submit" value="Register" id="submit" class="ui green button">
+    <input type="submit" value="Register" id="submit" class="bg-green">
 </form>
 
 <br><br>
 
 @if (ServerStatics.IsDebug)
 {
-    <button class="ui red button" onclick="fill()">DEBUG: Fill with everything but email</button>
+    <button class="ui bg-pink button" onclick="fill()">DEBUG: Fill with everything but email</button>
 
     <script>
         const usernameField = document.getElementById("text");

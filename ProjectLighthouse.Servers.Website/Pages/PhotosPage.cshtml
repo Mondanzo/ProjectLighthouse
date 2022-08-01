@@ -12,19 +12,20 @@
 <p>There are @Model.PhotoCount total photos!</p>
 
 <form action="/photos/0">
-    <div class="ui icon input">
-        <input type="text" autocomplete="off" name="name" placeholder="Search photos..." value="@Model.SearchValue">
-        <i class="search icon"></i>
+    <div class="input">
+        <i class="bx bx-search"></i>
+        <input class="no-input" type="text" autocomplete="off" name="name" placeholder="Search photos..." value="@Model.SearchValue">
     </div>
 </form>
-<div class="ui divider"></div>
-
+<div class="divider-solid"></div>
+<div class="cardGrid-bigger">
 @foreach (Photo photo in Model.Photos)
 {
-    <div class="ui segment">
+    <div class="photo">
         @await Html.PartialAsync("Partials/PhotoPartial", photo)
     </div>
 }
+</div>
 
 @if (Model.PageNumber != 0)
 {

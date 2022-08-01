@@ -31,7 +31,6 @@ public class BaseLayout : PageModel
     {
         this.Database = database;
 
-        this.NavigationItems.Add(new PageNavigationItem(BaseLayoutStrings.HeaderHome, "/", "home"));
         this.NavigationItems.Add(new PageNavigationItem(BaseLayoutStrings.HeaderUsers, "/users/0", "user friends"));
         this.NavigationItems.Add(new PageNavigationItem(BaseLayoutStrings.HeaderPhotos, "/photos/0", "camera"));
         this.NavigationItems.Add(new PageNavigationItem(BaseLayoutStrings.HeaderSlots, "/slots/0", "certificate"));

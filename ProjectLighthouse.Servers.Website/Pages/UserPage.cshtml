@@ -15,133 +15,128 @@
 
 @if (Model.ProfileUser.Banned)
 {
-    <div class="ui inverted red segment">
-        <h2>User is currently banned!</h2>
-        @if (Model.User != null && Model.User.IsAdmin)
+    <div class="container box-container box-background error">
+        <div class="divider-dashed no-margin"></div>
+        <div class="margin-box">
+            <h2>User is currently banned!</h2>
+            @if (Model.User != null && Model.User.IsAdmin)
+            {
+                <b>Reason:</b>
+                <span>"@Model.ProfileUser.BannedReason"</span>
+                <p>
+                    <i>Note: Only you and other admins may view the ban reason.</i>
+                </p>
+                <a class="button bg-orange" href="/admin/user/@Model.ProfileUser.UserId/unban">
+                    <i class="bx bx-block"></i>
+                    <span>Unban User</span>
+                </a>
+            }
+            else
+            {
+                <p>For shame...</p>
+            }
+        </div>
+        <div class="divider-dashed no-margin"></div>
+    </div>
+}
+<div class="user-grid">
+<div>
+    @await Html.PartialAsync("Partials/UserCardPartial", Model.ProfileUser, new ViewDataDictionary(ViewData)
+    {
         {
-            <b>Reason:</b>
-            <span>"@Model.ProfileUser.BannedReason"</span>
-            <p>
-                <i>Note: Only you and other admins may view the ban reason.</i>
-            </p>
-            <a class="ui inverted button" href="/admin/user/@Model.ProfileUser.UserId/unban">
-                <i class="ban icon"></i>
-                <span>Unban User</span>
+            "ShowLink", false
+        },
+        {
+            "Language", Model.GetLanguage()
+        }
+    })
+    @if (Model.ProfileUser != Model.User && Model.User != null)
+    {
+        if (!Model.IsProfileUserHearted)
+        {
+            <a class="bg-pink button" href="/user/@Model.ProfileUser.UserId/heart">
+                <i class="bx bx-heart"></i>
+                <span>Heart</span>
             </a>
         }
         else
         {
-            <p>For shame...</p>
-        }
-    </div>
-}
-
-<div class="ui grid">
-    <div class="eight wide column">
-        @await Html.PartialAsync("Partials/UserCardPartial", Model.ProfileUser, new ViewDataDictionary(ViewData)
-        {
-            {
-                "ShowLink", false
-            },
-            {
-                "IsMobile", Model.Request.IsMobile()
-            },
-            {
-                "Language", Model.GetLanguage()
-            }
-        })
-    </div>
-    <div class="eight wide right aligned column">
-        <br>
-        @if (Model.ProfileUser != Model.User && Model.User != null)
-        {
-            if (!Model.IsProfileUserHearted)
-            {
-                <a class="ui pink button" href="/user/@Model.ProfileUser.UserId/heart">
-                    <i class="heart icon"></i>
-                    <span>Heart</span>
-                </a>
-            }
-            else
-            {
-                <a class="ui pink button" href="/user/@Model.ProfileUser.UserId/unheart">
-                    <i class="heart broken icon"></i>
-                    <span>Unheart</span>
-                </a>
-            }
-        }
-        @if (Model.ProfileUser == Model.User)
-        {
-            <a class="ui blue button" href="/passwordReset">
-                <i class="key icon"></i>
-                <span>Reset Password</span>
+            <a class="bg-pink button" href="/user/@Model.ProfileUser.UserId/unheart">
+                <i class="bx bxs-heart"></i>
+                <span>Unheart</span>
             </a>
         }
+    }
+    @if (Model.ProfileUser == Model.User)
+    {
+        <a class="bg-pink button" href="/passwordReset">
+            <span>Reset Password</span>
+            <i class="bx bx-key"></i>
+        </a>
+    }
+</div>
+<div class="container box-container box-background" id="description">
+    <div class="divider-dashed no-margin"></div>
+    <div class="description box-margin">
+        <h2>Biography</h2>
+        @if (string.IsNullOrWhiteSpace(Model.ProfileUser.Biography))
+        {
+            <p>@Model.ProfileUser.Username hasn't introduced themselves yet</p>
+        }
+        else
+        {
+            <p>@HttpUtility.HtmlDecode(Model.ProfileUser.Biography)</p>
+        }
     </div>
-    <div class="eight wide column">
-        <div class="ui blue segment">
-            <h2>Biography</h2>
-            @if (string.IsNullOrWhiteSpace(Model.ProfileUser.Biography))
-            {
-                <p>@Model.ProfileUser.Username hasn't introduced themselves yet</p>
-            }
-            else
-            {
-                <p>@HttpUtility.HtmlDecode(Model.ProfileUser.Biography)</p>
-            }
-        </div>
+    <div class="divider-dashed no-margin"></div>
+</div>
+<div class="recent-activity">
+    <div class="divider-solid no-margin tablet-only"></div>
+    <div id="recent-activity">
+        <h2>Recent Activity</h2>
+        <p>Coming soon!</p>
     </div>
-    <div class="eight wide column">
-        <div class="ui red segment">
-            <h2>Recent Activity</h2>
-            <p>Coming soon!</p>
-        </div>
-    </div>
+</div>
 </div>
 
 
 @if (Model.Photos != null && Model.Photos.Count != 0)
 {
-    <div class="ui purple segment">
+    <div id="photos">
+        <div class="divider-solid"></div>
         <h2>Most recent photos</h2>
 
-        <div class="ui center aligned grid">
+        <div class="photos_container">
             @foreach (Photo photo in Model.Photos)
             {
-                <div class="eight wide column">
+                <div class="photo">
                     @await Html.PartialAsync("Partials/PhotoPartial", photo)
                 </div>
             }
         </div>
     </div>
 }
-
+<br>
 @await Html.PartialAsync("Partials/CommentsPartial")
-
+<br>
 @if (Model.User != null && Model.User.IsAdmin)
 {
-    <div class="ui yellow segment">
+    <div class="divider-solid"></div>
         <h2>Admin Options</h2>
 
-        @if (!Model.ProfileUser.Banned)
-        {
-            <div>
-                <a class="ui red button" href="/admin/user/@Model.ProfileUser.UserId/ban">
-                    <i class="ban icon"></i>
-                    <span>Ban User</span>
-                </a>
-            </div>
-            <div class="ui fitted hidden divider"></div>
-        }
-        
+    @if (!Model.ProfileUser.Banned)
+    {
         <div>
-            <a class="ui red button" href="/admin/user/@Model.ProfileUser.UserId/wipePlanets">
-                <i class="trash alternate icon"></i>
-                <span>Wipe user's earth decorations</span>
+            <a class="bg-pink button" href="/admin/user/@Model.ProfileUser.UserId/ban">
+                <i class="bx bx-block"></i>
+                <span>Ban User</span>
             </a>
+                <a class="bg-pink button" href="/admin/user/@Model.ProfileUser.UserId/wipePlanets">
+                <i class="bx bx-trash"></i>
+            <span>Wipe user's earth decorations</span>
+        </a>
         </div>
-        <div class="ui fitted hidden divider"></div>
-        
-        @await Html.PartialAsync("Partials/AdminSetGrantedSlotsFormPartial", Model.ProfileUser)
-    </div>
+    }
+    
+    @await Html.PartialAsync("Partials/AdminSetGrantedSlotsFormPartial", Model.ProfileUser)
 }

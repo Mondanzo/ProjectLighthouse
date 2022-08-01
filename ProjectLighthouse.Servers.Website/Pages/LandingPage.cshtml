@@ -11,72 +11,69 @@
     Model.ShowTitleInPage = false;
     bool isMobile = this.Request.IsMobile();
 }
-<h1>@Model.Translate(LandingPageStrings.Welcome, ServerConfiguration.Instance.Customization.ServerName)</h1>
+<div class="container box-background">
+    <div class="divider-dashed no-margin"></div>
+    <div class="box-margin">
+        <h1>@Model.Translate(LandingPageStrings.Welcome, ServerConfiguration.Instance.Customization.ServerName)</h1>
 
-@if (Model.User != null)
-{
-    <p>@Model.Translate(LandingPageStrings.LoggedInAs, Model.User.Username)</p>
-    if (ServerConfiguration.Instance.Authentication.UseExternalAuth && Model.PendingAuthAttempts > 0)
-    {
-        <p>
-            <b><a href="/authentication">@Model.Translate(LandingPageStrings.AuthAttemptsPending, Model.PendingAuthAttempts)</a></b>
-        </p>
-    }
-}
+        @if (Model.User != null)
+        {
+            <p>@Model.Translate(LandingPageStrings.LoggedInAs, Model.User.Username)</p>
+            if (ServerConfiguration.Instance.Authentication.UseExternalAuth && Model.PendingAuthAttempts > 0)
+            {
+                <p>
+                    <b><a href="/authentication">@Model.Translate(LandingPageStrings.AuthAttemptsPending, Model.PendingAuthAttempts)</a></b>
+                </p>
+            }
+        }
 
-@if (Model.PlayersOnlineCount == 1)
-{
-    <p>@Model.Translate(LandingPageStrings.UsersSingle)</p>
-    @foreach (User user in Model.PlayersOnline)
-    {
-        <a href="/user/@user.UserId" title="@user.Status.ToString()">@user.Username</a>
-    }
-}
+        @if (Model.PlayersOnlineCount == 1)
+        {
+            <p>@Model.Translate(LandingPageStrings.UsersSingle)</p>
+            @foreach (User user in Model.PlayersOnline)
+            {
+                <a style="font-family: helium, sans-serif;" href="/user/@user.UserId" title="@user.Status.ToString()">@user.Username</a>
+            }
+        }
 
-else if (Model.PlayersOnlineCount == 0)
-{
-    <p>@Model.Translate(LandingPageStrings.UsersNone)</p>
-}
-else
-{
-    <p>@Model.Translate(LandingPageStrings.UsersMultiple, Model.PlayersOnlineCount)</p>
-    @foreach (User user in Model.PlayersOnline)
-    {
-        <a href="/user/@user.UserId" title="@user.Status.ToString()">@user.Username</a>
-    }
-}
+        else if (Model.PlayersOnlineCount == 0)
+        {
+            <p>@Model.Translate(LandingPageStrings.UsersNone)</p>
+        }
+        else
+        {
+            <p>@Model.Translate(LandingPageStrings.UsersMultiple, Model.PlayersOnlineCount)</p>
+            @foreach (User user in Model.PlayersOnline)
+            {
+                <a href="/user/@user.UserId" title="@user.Status.ToString()">@user.Username</a>
+            }
+        }
+        </div>
+    <div class="divider-dashed no-margin"></div>
+</div>
 
-<br><br>
-
-<div class="@(isMobile ? "" : "ui center aligned grid")">
-    <div class="eight wide column">
-        <div class="ui pink segment">
-            <h1><i class="ribbon icon"></i>@Model.Translate(LandingPageStrings.LatestTeamPicks)</h1>
-            <div class="ui divider"></div>
-            <div class="ui left aligned segment">
+<div class="grid-rows-2">
+        <div class="ui segment">
+            <h1 class="team-picks pink">@Model.Translate(LandingPageStrings.LatestTeamPicks)</h1>
+            <div class="divider-solid"></div>
+            <div class="cardGrid">
                 @foreach (Slot slot in Model.LatestTeamPicks!) @* Can't reach a point where this is null *@
                 {
                     @await Html.PartialAsync("Partials/SlotCardPartial", slot, Model.GetSlotViewData(slot.SlotId, isMobile))
-                    <br>
+                }
+                @if(Model.LatestTeamPicks.Count == 0){
+                    <h1 class="pink" style="text-align: center; margin-top: 60px;">There are no Team Picks!</h1>
                 }
             </div>
         </div>
-    </div>
-    @if (isMobile)
-    {
-        <br>
-    }
-    <div class="eight wide column">
-        <div class="ui blue segment">
-            <h1><i class="certificate icon"></i>@Model.Translate(LandingPageStrings.NewestLevels)</h1>
-            <div class="ui divider"></div>
-            <div class="ui left aligned segment">
+        <div class="">
+            <h1 class="newest-levels">@Model.Translate(LandingPageStrings.NewestLevels)</h1>
+            <div class="divider-solid"></div>
+            <div class="cardGrid">
                 @foreach (Slot slot in Model.NewestLevels!) @* Can't reach a point where this is null *@
                 {
                     @await Html.PartialAsync("Partials/SlotCardPartial", slot, Model.GetSlotViewData(slot.SlotId, isMobile))
-                    <br>
                 }
-            </div>
         </div>
     </div>
 </div>

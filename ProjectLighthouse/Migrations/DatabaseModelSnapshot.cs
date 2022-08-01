@@ -291,8 +291,9 @@ namespace ProjectLighthouse.Migrations
 
                     b.Property<bool>("TeamPick")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("Type")
+                        
+                    b.Property<string>("Type")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("SlotId");

@@ -94,6 +94,7 @@ h1, h2, h3 {
 
 .item .logo {
     height: 256px !important;
+    margin-top: 16px;
 }
 
 .icon-title {
@@ -174,6 +175,10 @@ a {
     font-size: 1.2em;
 }
 
+.navigation a.logo {
+    padding: 24px;
+}
+
 a:not(.button) {
     color: var(--linkUnhover, #fdffff);
     transition: color 50ms ease;
@@ -201,7 +206,7 @@ a:hover:not(.button) {
 
 @media screen and (max-width: 1000px){
     .navigation {
-        margin-bottom: 124px;
+        margin-bottom: 140px;
         transition: margin 200ms ease;
     }
 
@@ -221,7 +226,7 @@ a:hover:not(.button) {
     .navigation .logo {
         overflow: visible;
         position: absolute;
-        top: 0;
+        top: 16px;
     }
 
     .navigation .navigations_inner .navigation_items {
@@ -236,7 +241,7 @@ a:hover:not(.button) {
     #menu_swap:checked ~ .navigations_inner {
         max-height: 1000px;
         overflow: visible;
-        padding-top: 120px;
+        padding-top: 150px;
     }
 
     .mobile-only {

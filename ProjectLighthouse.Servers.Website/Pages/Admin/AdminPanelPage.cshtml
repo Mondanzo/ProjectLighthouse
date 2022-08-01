@@ -10,64 +10,58 @@
     Layout = "Layouts/BaseLayout";
     Model.Title = "Admin Panel";
 }
-
+<div class="divider-solid"></div>
 @if (Model.Log != null)
 {
-    <div class="ui bottom attached message">
-        <h2>Command Output</h2>
-        @foreach (string line in Model.Log.Split("\n"))
-        {
-            <code>@line.TrimEnd()</code><br>
-        }
+    <div class="container box-container box-background">
+        <div class="divider-dashed no-margin"></div>
+        <div class="box-margin">
+            <h2>Command Output</h2>
+            @foreach (string line in Model.Log.Split("\n"))
+            {
+                <code>@line.TrimEnd()</code><br>
+            }
+        </div>
+        <div class="divider-dashed no-margin"></div>
     </div>
 }
-
-@if (!this.Request.IsMobile())
-{
-    <div class="ui center aligned grid">
-        @foreach (AdminPanelStatistic statistic in Model.Statistics)
-        {
-            @await Html.PartialAsync("Partials/AdminPanelStatisticPartial", statistic)
-        }
-    </div>
-    <br>
-}
-else
-{
+<div class="adminContainer">
     @foreach (AdminPanelStatistic statistic in Model.Statistics)
     {
         @await Html.PartialAsync("Partials/AdminPanelStatisticPartial", statistic)
-        <br>
     }
-}
-
+</div>
+<br>
+<div class="divider-solid"></div>
 <h2>Commands</h2>
 @foreach (ICommand command in MaintenanceHelper.Commands)
 {
-    <div class="ui blue segment">
+    <div class="divider-dashed"></div>
+    <div class="box-container box-margin">
         <h3>@command.Name()</h3>
         <form>
             <input type="text" name="command" style="display: none;" value="@command.FirstAlias">
             @if (command.RequiredArgs() > 0)
             {
-                <div class="ui left action input" style="width: 100%">
-                    <button type="submit" class="ui green button">
-                        <i class="play icon"></i>
+                <div style="max-width: 100%;">
+                    <button type="submit" class="bg-green">
+                        <i class="bx bx-play"></i>
                         Execute
                     </button>
-                    <input type="text" name="args" placeholder="@command.Arguments()">
+                    <input class="box-margin" type="text" name="args" placeholder="@command.Arguments()">
                 </div>
             }
             else
             {
-                <button type="submit" class="ui green button">
-                    <i class="play icon"></i>
+                <button type="submit" class="bg-green">
+                    <i class="bx bx-play"></i>
                     Execute
                 </button>
             }
         </form>
     </div>
 }
+<div class="divider-solid"></div>
 <h2>Maintenance Jobs</h2>
 <p>
     <b>Warning: Interrupting Lighthouse during maintenance may leave the database in an unclean state.</b>
@@ -75,15 +69,17 @@ else
 
 @foreach (IMaintenanceJob job in MaintenanceHelper.MaintenanceJobs)
 {
-    <div class="ui red segment">
+    <div class="divider-dashed"></div>
+    <div class="box-container box-margin">
         <h3>@job.Name()</h3>
         <p>@job.Description()</p>
         <form>
             <input type="text" name="maintenanceJob" style="display: none;" value="@job.GetType().Name">
-            <button type="submit" class="ui green button">
-                <i class="play icon"></i>
+            <button type="submit" class="bg-pink">
+                <i class="bx bx-play"></i>
                 Run Job
             </button>
         </form>
     </div>
 }
+<div class="divider-solid"></div>

@@ -1,0 +1,64 @@
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 358ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 159ms.
+[Website] [Success] <StartupTasks:149> Total migration took 518ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 208ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 208ms.
+[Website] [Success] <StartupTasks:149> Total migration took 417ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 108ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 163ms.
+[Website] [Success] <StartupTasks:149> Total migration took 272ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 569ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 170ms.
+[Website] [Success] <StartupTasks:149> Total migration took 740ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 102ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 161ms.
+[Website] [Success] <StartupTasks:149> Total migration took 264ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 413ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 161ms.
+[Website] [Success] <StartupTasks:149> Total migration took 575ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 130ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 184ms.
+[Website] [Success] <StartupTasks:149> Total migration took 315ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 129ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 186ms.
+[Website] [Success] <StartupTasks:149> Total migration took 316ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 108ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 135ms.
+[Website] [Success] <StartupTasks:149> Total migration took 245ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 164ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 150ms.
+[Website] [Success] <StartupTasks:149> Total migration took 314ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 97ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 145ms.
+[Website] [Success] <StartupTasks:149> Total migration took 243ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 112ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 173ms.
+[Website] [Success] <StartupTasks:149> Total migration took 285ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 467ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 184ms.
+[Website] [Success] <StartupTasks:149> Total migration took 652ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 103ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 135ms.
+[Website] [Success] <StartupTasks:149> Total migration took 239ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 100ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 141ms.
+[Website] [Success] <StartupTasks:149> Total migration took 242ms.
+[Website] [Info] <StartupTasks:121> Migrating database...
+[Website] [Success] <StartupTasks:129> Structure migration took 122ms.
+[Website] [Success] <StartupTasks:148> Extra migration tasks took 172ms.
+[Website] [Success] <StartupTasks:149> Total migration took 295ms.

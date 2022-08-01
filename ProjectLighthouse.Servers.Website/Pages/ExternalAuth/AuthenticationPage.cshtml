@@ -10,22 +10,32 @@
 
 @if (Model.AuthenticationAttempts.Count == 0)
 {
-    <p>You have no pending authentication attempts.</p>
+    <div class="container box-background">
+        <div class="divider-dashed no-margin"></div>
+        <p class="margin-box">You have no pending authentication attempts.</p>
+        <div class="divider-dashed no-margin"></div>
+    </div>
 }
 else
 {
-    <p>You have @Model.AuthenticationAttempts.Count authentication attempts pending.</p>
-    @if (Model.IpAddress != null)
-    {
-        <p>This device's IP address is <b>@(Model.IpAddress.ToString())</b>. If this matches with an authentication attempt below, then it's safe to assume the authentication attempt came from the same network as this device.</p>
-    }
+    <div class="container box-background">
+        <div class="divider-dashed no-margin"></div>
+        <div class="container box-margin">
+            <p>You have @Model.AuthenticationAttempts.Count authentication attempts pending.</p>
+            @if (Model.IpAddress != null)
+            {
+                <p>This device's IP address is <b>@(Model.IpAddress.ToString())</b>. If this matches with an authentication attempt below, then it's safe to assume the authentication attempt came from the same network as this device.</p>
+            }
+            </div>
+        <div class="divider-dashed no-margin"></div>
+    </div>
 }
 
 @if (Model.User!.ApprovedIPAddress != null)
 {
     <a href="/authentication/revokeAutoApproval">
-        <button class="ui red button">
-            <i class="trash icon"></i>
+        <button class="bg-pink icon-title">
+            <i class="bx bx-xs bx-trash"></i>
             <span>Revoke automatically approved IP Address (@Model.User!.ApprovedIPAddress)</span>
         </button>
     </a>
@@ -38,32 +48,33 @@ else
             <span>Deny all</span>
         </button>
     </a>    
+    <div class="divider-solid no-margin"></div>
 }
+
 
 @foreach (AuthenticationAttempt authAttempt in Model.AuthenticationAttempts)
 {
     DateTimeOffset timestamp = DateTimeOffset.FromUnixTimeSeconds(authAttempt.Timestamp);
-    <div class="ui red segment">
+    <div class="container box-margin">
         <p>A <b>@authAttempt.Platform</b> authentication request was logged at <b>@timestamp.ToString("MM/dd/yyyy @ h:mm tt") UTC</b> from the IP address <b>@authAttempt.IPAddress</b>.</p>
-        <div>
-            <a href="/authentication/autoApprove/@authAttempt.AuthenticationAttemptId">
-                <button class="ui small green button">
-                    <i class="check icon"></i>
-                    <span>Automatically approve every time</span>
-                </button>
+        <div class="buttons_list">
+            <a href="/authentication/autoApprove/@authAttempt.AuthenticationAttemptId" class="button bg-green icon-title">
+                <i class="bx bx-check"></i>
+                <span>Automatically approve every time</span>
             </a>
-            <a href="/authentication/approve/@authAttempt.AuthenticationAttemptId">
-                <button class="ui small yellow button">
-                    <i class="check icon"></i>
-                    <span>Approve this time</span>
-                </button>
+            <a href="/authentication/approve/@authAttempt.AuthenticationAttemptId" class="button bg-orange icon-title">
+                <i class="bx bx-check"></i>
+                <span>Approve this time</span>
             </a>
-            <a href="/authentication/deny/@authAttempt.AuthenticationAttemptId">
-                <button class="ui small red button">
-                    <i class="x icon"></i>
-                    <span>Deny</span>
-                </button>
+            <a href="/authentication/deny/@authAttempt.AuthenticationAttemptId" class="button bg-pink icon-title">
+                <i class="bx bx-x"></i>
+                <span>Deny</span>
             </a>
         </div>
     </div>
+    @if(Model.AuthenticationAttempts.Last() != authAttempt) { <div class="divider-dashed"></div> }
+}
+
+@if (Model.AuthenticationAttempts.Count > 1){
+    <div class="divider-solid no-margin"></div>
 }

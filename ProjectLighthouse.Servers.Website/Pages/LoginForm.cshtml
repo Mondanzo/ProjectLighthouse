@@ -28,11 +28,15 @@
 
 @if (!string.IsNullOrWhiteSpace(Model.Error))
 {
-    <div class="ui negative message">
-        <div class="header">
-            @Model.Translate(GeneralStrings.Error)
+    <div class="container box-container box-background error">
+        <div class="divider-dashed no-margin"></div>
+        <div class="box-margin">
+            <h3 class="header no-margin">
+                @Model.Translate(GeneralStrings.Error)
+            </h3>
+            <p class="no-margin">@Model.Error</p>
         </div>
-        <p style="white-space: pre-line">@Model.Error</p>
+        <div class="divider-dashed no-margin"></div>
     </div>
 }
 
@@ -42,18 +46,18 @@
 
     <div class="field">
         <label>@Model.Translate(GeneralStrings.Username)</label>
-        <div class="ui left icon input">
-            <input type="text" name="username" id="text" placeholder="@Model.Translate(GeneralStrings.Username)">
-            <i class="user icon"></i>
+        <div class="input">
+            <i class="bx bx-user"></i>
+            <input class="no-input" type="text" name="username" id="text" placeholder="@Model.Translate(GeneralStrings.Username)">
         </div>
     </div>
 
     <div class="field">
         <label>@Model.Translate(GeneralStrings.Password)</label>
-        <div class="ui left icon input">
-            <input type="password" id="password" placeholder="@Model.Translate(GeneralStrings.Password)">
+        <div class="input">
+            <i class="bx bx-lock"></i>
+            <input class="no-input" type="password" id="password" placeholder="@Model.Translate(GeneralStrings.Password)">
             <input type="hidden" id="password-submit" name="password">
-            <i class="lock icon"></i>
         </div>
     </div>
 
@@ -63,21 +67,16 @@
     }
     
     <div class="row">
-        <input type="submit" value="@Model.Translate(GeneralStrings.LogIn)" id="submit" class="ui blue button">
+        <input type="submit" value="@Model.Translate(GeneralStrings.LogIn)" id="submit" class="bg-pink">
         @if (ServerConfiguration.Instance.Authentication.RegistrationEnabled)
         {
-            <a href="/register">
-                <div class="ui button">
-                    <i class="user alternate add icon"></i>
-                    @Model.Translate(GeneralStrings.Register)
-                </div>
+            <a href="/register" class="bg-orange button">
+                @Model.Translate(GeneralStrings.Register)
             </a>
         }       
     </div>
     <br/>
         <a href="/passwordResetRequest">
-            <div class="ui button">
-                @Model.Translate(GeneralStrings.ForgotPassword)
-            </div>
+            @Model.Translate(GeneralStrings.ForgotPassword)
         </a>
 </form>

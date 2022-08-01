@@ -10,32 +10,46 @@
 
 <p>There are currently @Model.UserCount users registered to your instance.</p>
 <p><b>Note:</b> Users are ordered by most-recent-first.</p>
-
-<div class="ui grid">
+<div class="divider-solid no-margin"></div>
+<table class="users-table">
+    <thead>
+        <tr>
+            <th>User ID</th>
+            <th>User Name</th>
+            <th>IsAdmin</th>
+            <th>Banned</th>
+            <th>Banned Reason</th>
+        </tr>
+        <tr>
+            <th><div class="divider-dashed no-margin"></div></th>
+            <th><div class="divider-dashed no-margin"></div></th>
+            <th><div class="divider-dashed no-margin"></div></th>
+            <th><div class="divider-dashed no-margin"></div></th>
+            <th><div class="divider-dashed no-margin"></div></th>
+        </tr>
+    </thead>
+    <tbody>
     @foreach (User user in Model.Users)
     {
-        string color = "blue";
-        string subtitle = "User";
-        if (user.IsAdmin)
-        {
-            color = "yellow";
-            subtitle = "Admin";
+        var bannedReason = "x";
+        if(user.Banned) bannedReason = user.BannedReason;
+        <tr>
+            <td>@user.UserId</td>
+            <td>@user.Username</td>
+            <td>@user.IsAdmin</td>
+            <td>@user.Banned</td>
+            <td>@bannedReason</td>
+        </tr>
+        @if(user != Model.Users.Last()){
+            <tr>
+                <td><div class="divider-dashed no-margin"></div></td>
+                <td><div class="divider-dashed no-margin"></div></td>
+                <td><div class="divider-dashed no-margin"></div></td>
+                <td><div class="divider-dashed no-margin"></div></td>
+                <td><div class="divider-dashed no-margin"></div></td>
+            </tr>
         }
-        if (user.Banned)
-        {
-            color = "red";
-            subtitle = $"Banned user! Reason: {user.BannedReason}";
-        }
-
-        subtitle += $" (id: {user.UserId})";
-
-        <div class="eight wide column">
-            <div class="ui @color segment">
-                <h2>
-                    <a href="/user/@user.UserId">@user.Username</a>
-                </h2>
-                <h3>@subtitle</h3>
-            </div>
-        </div>
     }
-</div>
+    </tbody>
+</table>
+<div class="divider-solid no-margin"></div>

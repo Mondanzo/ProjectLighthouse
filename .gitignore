@@ -29,7 +29,7 @@ gitVersion.txt
 gitRemotes.txt
 gitUnpushed.txt
 gitRevCount.txt
-logs/*
+logs/
 npTicket*
 r.tar.gz
 lighthouse.yml.configme

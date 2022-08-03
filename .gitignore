@@ -49,3 +49,4 @@ backup*
 
 # Docker Stuff
 ProjectLighthouse.*.tar
+logs/

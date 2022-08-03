@@ -71,7 +71,7 @@
     @if (Model.ProfileUser == Model.User)
     {
         <a class="bg-pink button" href="/passwordReset">
-            <span>Reset Password</span>
+            <span>@Model.Translate(GeneralStrings.ResetPassword)</span>
             <i class="bx bx-key"></i>
         </a>
     }
@@ -79,10 +79,10 @@
 <div class="container box-container box-background" id="description">
     <div class="divider-dashed no-margin"></div>
     <div class="description box-margin">
-        <h2>Biography</h2>
+        <h2>@Model.Translate(ProfileStrings.Biography)</h2>
         @if (string.IsNullOrWhiteSpace(Model.ProfileUser.Biography))
         {
-            <p>@Model.ProfileUser.Username hasn't introduced themselves yet</p>
+                <p>@Model.Translate(ProfileStrings.NoBiography, Model.ProfileUser.Username)</p>
         }
         else
         {
@@ -94,8 +94,8 @@
 <div class="recent-activity">
     <div class="divider-solid no-margin tablet-only"></div>
     <div id="recent-activity">
-        <h2>Recent Activity</h2>
-        <p>Coming soon!</p>
+        <h2>@Model.Translate(GeneralStrings.RecentActivity)</h2>
+        <p>@Model.Translate(GeneralStrings.Soon)</p>
     </div>
 </div>
 </div>
@@ -105,7 +105,7 @@
 {
     <div id="photos">
         <div class="divider-solid"></div>
-        <h2>Most recent photos</h2>
+            <h2>@Model.Translate(GeneralStrings.RecentPhotos)</h2>
 
         <div class="photos_container">
             @foreach (Photo photo in Model.Photos)

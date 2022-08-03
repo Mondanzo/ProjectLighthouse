@@ -210,6 +210,9 @@ namespace ProjectLighthouse.Migrations
                     b.Property<bool>("InitiallyLocked")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int>("InternalSlotId")
+                        .HasColumnType("int");
+
                     b.Property<long>("LastUpdated")
                         .HasColumnType("bigint");
 
@@ -288,6 +291,9 @@ namespace ProjectLighthouse.Migrations
 
                     b.Property<bool>("TeamPick")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("SlotId");
 
@@ -422,9 +428,6 @@ namespace ProjectLighthouse.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("ResetToken")
                         .HasColumnType("longtext");
 
@@ -461,6 +464,9 @@ namespace ProjectLighthouse.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("SlotId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SmallHash")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -471,6 +477,8 @@ namespace ProjectLighthouse.Migrations
                     b.HasKey("PhotoId");
 
                     b.HasIndex("CreatorId");
+
+                    b.HasIndex("SlotId");
 
                     b.ToTable("Photos");
                 });
@@ -674,8 +682,14 @@ namespace ProjectLighthouse.Migrations
                     b.Property<string>("IconHash")
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("IsAPirate")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("LevelVisibility")
+                        .HasColumnType("int");
 
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
@@ -700,6 +714,9 @@ namespace ProjectLighthouse.Migrations
 
                     b.Property<string>("PlanetHashLBPVita")
                         .HasColumnType("longtext");
+
+                    b.Property<int>("ProfileVisibility")
+                        .HasColumnType("int");
 
                     b.Property<string>("Username")
                         .HasColumnType("longtext");
@@ -741,9 +758,6 @@ namespace ProjectLighthouse.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Token")
@@ -1006,7 +1020,13 @@ namespace ProjectLighthouse.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("LBPUnion.ProjectLighthouse.Levels.Slot", "Slot")
+                        .WithMany()
+                        .HasForeignKey("SlotId");
+
                     b.Navigation("Creator");
+
+                    b.Navigation("Slot");
                 });
 
             modelBuilder.Entity("LBPUnion.ProjectLighthouse.PlayerData.PhotoSubject", b =>

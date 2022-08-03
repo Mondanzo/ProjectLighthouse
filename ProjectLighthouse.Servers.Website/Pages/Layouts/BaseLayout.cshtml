@@ -215,10 +215,10 @@
                 }
 
                 console.log(window.matchMedia('(prefers-color-scheme: dark)'));
-                if (localStorage.getItem("darkMode") === null && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                if (localStorage.getItem("darkMode") == null && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                     console.log(window.matchMedia('prefers-color-scheme: dark').matches);
                     localStorage.setItem("darkMode", "true");
-                } else {
+                } else if (localStorage.getItem("darkMode") == null) {
                     localStorage.setItem("darkMode", "false");
                 }
 

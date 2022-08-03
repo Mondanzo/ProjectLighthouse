@@ -1,0 +1,58 @@
+configVersionDoNotModifyOrYouWillBeSlapped: 5
+listenUrl: http://0.0.0.0:10060
+websiteListenUrl: http://0.0.0.0:10060
+gameApiListenUrl: http://0.0.0.0:10061
+apiListenUrl: http://0.0.0.0:10062
+dbConnectionString: server=mariadb;uid=root;pwd=lighthouse;database=lighthouse
+redisConnectionString: redis://redis:6379
+externalUrl: http://0.0.0.0:10060
+configReloading: false
+eulaText: ''
+announceText: You are now logged in as %user.
+checkForUnsafeFiles: true
+userInputFilterMode: None
+authentication:
+  blockDeniedUsers: false
+  registrationEnabled: true
+  useExternalAuth: false
+captcha:
+  captchaEnabled: false
+  siteKey: ''
+  secret: ''
+digestKey:
+  primaryDigestKey: ''
+  alternateDigestKey: ''
+discordIntegration:
+  discordIntegrationEnabled: false
+  url: ''
+googleAnalytics:
+  analyticsEnabled: false
+  id: ''
+influxDB:
+  influxEnabled: false
+  loggingEnabled: false
+  organization: lighthouse
+  bucket: lighthouse
+  token: ''
+  url: http://localhost:8086
+mail:
+  mailEnabled: false
+  host: ''
+  port: 587
+  fromAddress: lighthouse@example.com
+  fromName: Project Lighthouse
+  password: ''
+  useSSL: true
+userGeneratedContentLimits:
+  entitledSlots: 50
+  listsQuota: 50
+  photosQuota: 500
+  profileCommentsEnabled: true
+  levelCommentsEnabled: true
+  levelReviewsEnabled: true
+  booingEnabled: true
+websiteConfiguration:
+  missingIconHash: ''
+  convertAssetsOnStartup: true
+customization:
+  serverName: Project Lighthouse - Docker Build

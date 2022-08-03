@@ -1,0 +1,10 @@
+CONTRIBUTING.md
+LICENSE
+README.md
+.github/
+.idea/
+.run/
+scripts-and-tools/
+build.bat
+docker-*
+ProjectLighthouse.tar

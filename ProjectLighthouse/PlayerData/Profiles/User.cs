@@ -34,6 +34,8 @@ public class User
     #nullable enable
     [JsonIgnore]
     public string? EmailAddress { get; set; } = null;
+
+    public NetworkPlatform? AccountType {get; set;} = null;
     #nullable disable
 
     public bool EmailAddressVerified { get; set; } = false;

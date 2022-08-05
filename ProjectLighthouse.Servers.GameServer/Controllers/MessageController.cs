@@ -42,7 +42,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.";
         User? user = await this.database.UserFromGameRequest(this.Request);
         if (user == null) return this.StatusCode(403, "");
 
-        return this.Ok($"{license}\n{ServerConfiguration.Instance.EulaText}");
+        string optString = "";
+
+        if(ServerConfiguration.Instance.Authentication.UseGameServerRegistering){
+            RegistrationToken? userToken = database.RegistrationTokens.FirstOrDefault(t => t.UserId == user.UserId);
+            if(userToken != null) optString = $"You can Register your account and access your account info on the website by using this Registration Code: {userToken.Token}";
+        }
+
+        return this.Ok($"{optString}\n{license}\n{ServerConfiguration.Instance.EulaText}");
     }
 
     [HttpGet("announce")]

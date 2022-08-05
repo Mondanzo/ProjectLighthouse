@@ -19,11 +19,27 @@ public class RegisterForm : BaseLayout
     { }
 
     public string? Error { get; private set; }
+    public User? RegisterUser {get; private set; }
 
     [UsedImplicitly]
     [SuppressMessage("ReSharper", "SpecifyStringComparison")]
-    public async Task<IActionResult> OnPost(string username, string password, string confirmPassword, string emailAddress)
+    public async Task<IActionResult> OnPost(string username, string password, string confirmPassword, string emailAddress, string registerCode, string? doRegister)
     {
+        RegistrationToken? token;
+        if(ServerConfiguration.Instance.Authentication.UseGameServerRegistering){
+            token = await this.Database.RegistrationTokens.Include(t => t.User).FirstOrDefaultAsync(t => t.Token == registerCode);
+            if(token != null){
+                this.Request.QueryString = this.Request.QueryString.Add("code", registerCode);
+                RegisterUser = token.User;
+                if(doRegister == null) return this.Page();
+            } else {
+                Error = "Registration Code is wrong.";
+                return this.Page();
+            }
+        }
+
+        if(ServerConfiguration.Instance.Authentication.UseGameServerRegistering && RegisterUser == null) return this.BadRequest();
+
         if (ServerConfiguration.Instance.Authentication.PrivateRegistration)
         {
             if (this.Request.Query.ContainsKey("token"))
@@ -65,7 +81,7 @@ public class RegisterForm : BaseLayout
             return this.Page();
         }
 
-        if (await this.Database.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower()) != null)
+        if (!ServerConfiguration.Instance.Authentication.UseGameServerRegistering && await this.Database.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower()) != null)
         {
             this.Error = this.Translate(ErrorStrings.UsernameTaken);
             return this.Page();
@@ -89,7 +105,19 @@ public class RegisterForm : BaseLayout
             await Database.RemoveRegistrationToken(this.Request.Query["token"]);
         }
 
-        User user = await this.Database.CreateUser(username, CryptoHelper.BCryptHash(password), emailAddress);
+        User user;
+        if(!ServerConfiguration.Instance.Authentication.UseGameServerRegistering)
+            user = await this.Database.CreateUser(username, CryptoHelper.BCryptHash(password), emailAddress);
+        else {
+            RegisterUser.Password = CryptoHelper.BCryptHash(password);
+            RegisterUser.EmailAddress = emailAddress;
+            this.Database.Users.Update(RegisterUser);
+            await this.Database.SaveChangesAsync();
+            user = RegisterUser;
+
+            await Database.RemoveRegistrationToken(this.Request.Query["code"]);
+        }
+            
 
         WebToken webToken = new()
         {

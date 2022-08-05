@@ -10,4 +10,6 @@ public class AuthenticationConfiguration
     public bool RegistrationEnabled { get; set; } = true;
     public bool PrivateRegistration { get; set; } = false;
     public bool UseExternalAuth { get; set; }
+
+    public bool UseGameServerRegistering { get; set; }
 }

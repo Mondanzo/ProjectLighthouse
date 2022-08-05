@@ -101,8 +101,41 @@ public class Database : DbContext
 
     public async Task<GameToken?> AuthenticateUser(NPTicket npTicket, string userLocation)
     {
-        User? user = await this.Users.FirstOrDefaultAsync(u => u.Username == npTicket.Username);
-        if (user == null) return null;
+        User? user;
+        if(ServerConfiguration.Instance.Authentication.UseGameServerRegistering)
+            user = await this.Users.FirstOrDefaultAsync(u => (ulong) u.UserId == npTicket.UserId && u.AccountType == PlatformHelper.GetNetworkFromPlatform(npTicket.Platform));
+        else
+            user = await this.Users.FirstOrDefaultAsync(u => u.Username == npTicket.Username);
+        if (user == null && !ServerConfiguration.Instance.Authentication.UseGameServerRegistering) return null;
+
+        if(user == null && ServerConfiguration.Instance.Authentication.UseGameServerRegistering) {
+
+            Location l = new();
+            this.Locations.Add(l);
+            await this.SaveChangesAsync();
+
+            user = new User {
+                UserId = (int) npTicket.UserId,
+                Username = npTicket.Username,
+                LocationId = l.Id,
+                Biography = "",
+                AccountType = PlatformHelper.GetNetworkFromPlatform(npTicket.Platform)
+            };
+
+            RegistrationToken reg_token = new RegistrationToken{
+                Token = Random.Shared.Next((int) Math.Pow(10, 5), (int) Math.Pow(10, 6) -1).ToString(),
+                UserId = user.UserId,
+                Created = DateTime.Now
+            };
+
+            this.RegistrationTokens.Add(reg_token);
+
+            await this.SaveChangesAsync();
+
+            this.Users.Add(user);
+
+            await this.SaveChangesAsync();
+        }
 
         GameToken gameToken = new()
         {

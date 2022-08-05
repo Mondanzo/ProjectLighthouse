@@ -19,6 +19,7 @@ namespace LBPUnion.ProjectLighthouse.Tickets;
 public class NPTicket
 {
     public string? Username { get; set; }
+    public ulong UserId { get; private set; }
 
     private Version? ticketVersion { get; set; }
 
@@ -40,7 +41,7 @@ public class NPTicket
         npTicket.IssuedDate = reader.ReadTicketUInt64();
         npTicket.ExpireDate = reader.ReadTicketUInt64();
 
-        reader.ReadTicketUInt64(); // PSN User id, we don't care about this
+        npTicket.UserId = reader.ReadTicketUInt64(); // PSN User id, we don't care about this
 
         npTicket.Username = reader.ReadTicketString();
 
@@ -72,6 +73,7 @@ public class NPTicket
                 {
                     IssuerId = 0,
                     ticketVersion = new Version(0, 0),
+                    UserId = 0,
                     Platform = Platform.UnitTest,
                     GameVersion = GameVersion.LittleBigPlanet2,
                     ExpireDate = 0,

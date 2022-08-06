@@ -68,8 +68,13 @@ public class LoginForm : BaseLayout
 
         if (user == null)
         {
-            Logger.Warn($"User {username} failed to login on web due to invalid username", LogArea.Login);
-            this.Error = "The username or password you entered is invalid.";
+            if(ServerConfiguration.Instance.Authentication.UseGameServerRegistering){
+                Logger.Warn($"User {username} failed to login on web due to invalid username or wrong account type", LogArea.Login);
+                this.Error = "The username, password or account type you entered is invalid.";
+            } else {
+                Logger.Warn($"User {username} failed to login on web due to invalid username", LogArea.Login);
+                this.Error = "The username or password you entered is invalid.";
+            }
             return this.Page();
         }
 

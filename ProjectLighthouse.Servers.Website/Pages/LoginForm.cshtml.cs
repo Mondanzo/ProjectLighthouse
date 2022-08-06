@@ -23,7 +23,7 @@ public class LoginForm : BaseLayout
     public string? Error { get; private set; }
 
     [UsedImplicitly]
-    public async Task<IActionResult> OnPost(string username, string password, string redirect)
+    public async Task<IActionResult> OnPost(string username, string password, string redirect, string? accountVersion)
     {
         if (string.IsNullOrWhiteSpace(username))
         {
@@ -43,7 +43,29 @@ public class LoginForm : BaseLayout
             return this.Page();
         }
 
-        User? user = await this.Database.Users.FirstOrDefaultAsync(u => u.Username == username);
+        User? user;
+        if(accountVersion != null) {
+            NetworkPlatform? platform = null;
+            switch(accountVersion){
+                case "PSN":
+                    platform = NetworkPlatform.PSN;
+                    break;
+                case "RPCN":
+                    platform = NetworkPlatform.RPCN;
+                    break;
+            }
+
+            if(platform == null){
+                Logger.Warn($"User {username} failed to login on web due to invalid AccountType", LogArea.Login);
+                this.Error = "Couldn't determine the Platform! This should not happen. Please report a bug.";
+                return this.Page();
+            }
+
+            user = await this.Database.Users.FirstOrDefaultAsync(u => u.Username == username && u.AccountType == platform);
+        } else {
+            user = await this.Database.Users.FirstOrDefaultAsync(u => u.Username == username);
+        }
+
         if (user == null)
         {
             Logger.Warn($"User {username} failed to login on web due to invalid username", LogArea.Login);

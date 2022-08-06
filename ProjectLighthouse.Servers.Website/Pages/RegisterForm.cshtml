@@ -57,7 +57,7 @@
         <div class="field">
             <label>Username</label>
             <div class="ui left icon input">
-                <input type="text" name="username" id="text" placeholder="Username" pattern="^[a-zA-Z0-9_.-]*$" minlength="3" maxlength="16" readonly="@ServerConfiguration.Instance.Authentication.UseGameServerRegistering" value="@Model.RegisterUser.Username">
+                <input type="text" name="username" id="text" placeholder="Username" pattern="^[a-zA-Z0-9_.-]*$" minlength="3" maxlength="16" readonly="@ServerConfiguration.Instance.Authentication.UseGameServerRegistering" value="@(Model.RegisterUser != null ? Model.RegisterUser.Username : "")">
                 <i class="user icon"></i>
             </div>
         </div>
